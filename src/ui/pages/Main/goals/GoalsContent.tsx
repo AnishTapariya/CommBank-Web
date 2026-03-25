@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { media } from '../../../utils/media'
 import GoalCard from './GoalCard'
 
+
 type Props = { ids: string[] | null }
 
 export default function GoalsContent(props: Props) {

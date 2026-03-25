@@ -11,10 +11,13 @@ import { selectGoalsMap, updateGoal as updateGoalRedux } from '../../../store/go
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import DatePicker from '../../components/DatePicker'
 import { Theme } from '../../components/Theme'
+import { EmojiPicker } from "../../components/EmojiPicker";
 
 type Props = { goal: Goal }
 export function GoalManager(props: Props) {
   const dispatch = useAppDispatch()
+  const [selectedIcon, setSelectedIcon] = useState(props.goal.icon || "🎯");
+const [showPicker, setShowPicker] = useState(false);
 
   const goal = useAppSelector(selectGoalsMap)[props.goal.id]
 
@@ -76,6 +79,8 @@ export function GoalManager(props: Props) {
   }
 
   return (
+    
+
     <GoalManagerContainer>
       <NameInput value={name ?? ''} onChange={updateNameOnChange} />
 
@@ -106,7 +111,34 @@ export function GoalManager(props: Props) {
           <StringValue>{new Date(props.goal.created).toLocaleDateString()}</StringValue>
         </Value>
       </Group>
+      <div style={{ marginBottom: "1rem" }}>
+  <button type="button" onClick={() => setShowPicker(!showPicker)}>
+    Select Icon {selectedIcon}
+  </button>
+
+  {showPicker && (
+    <EmojiPicker
+      onSelect={(emoji) => {
+        setSelectedIcon(emoji);
+        setShowPicker(false);
+
+        // 🔥 update immediately when selected
+        const updatedGoal: Goal = {
+          ...props.goal,
+          icon: selectedIcon,
+          name: name ?? props.goal.name,
+          targetDate: targetDate ?? props.goal.targetDate,
+          targetAmount: targetAmount ?? props.goal.targetAmount,
+        };
+
+        dispatch(updateGoalRedux(updatedGoal));
+        updateGoalApi(props.goal.id, updatedGoal);
+      }}
+    />
+  )}
+</div>
     </GoalManagerContainer>
+    
   )
 }
 

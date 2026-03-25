@@ -1,5 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useState } from "react";
+import { EmojiPicker } from "../../components/EmojiPicker";
 import { Goal } from '../../../api/types'
 import { useAppSelector } from '../../../store/hooks'
 import { selectContent, selectIsOpen, selectType } from '../../../store/modalSlice'
